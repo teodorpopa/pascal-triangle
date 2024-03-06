@@ -18,7 +18,7 @@ func rowLength(row []int64) int {
 	return length
 }
 
-func pascalTriangle(rows *int64) {
+func pascalTriangle(rows *int64, color *bool) {
 	var rowsData = make([][]int64, *rows)
 	var row, col int64
 	var number int64
@@ -36,11 +36,19 @@ func pascalTriangle(rows *int64) {
 	maxWidth := rowLength(rowsData[*rows-1])
 
 	for _, r := range rowsData {
-		var padding = (maxWidth - rowLength(r)) / 2
+		var rowOutput = ""
 
-		fmt.Print(strings.Repeat(" ", int(padding)))
+		var padding = (maxWidth - rowLength(r)) / 2
+		fmt.Print(strings.Repeat(" ", padding))
+
 		for _, num := range r {
-			fmt.Print(num, SEPARATOR)
+			rowOutput += fmt.Sprint(num, SEPARATOR)
+		}
+
+		if *color {
+			fmt.Printf("\033[1;34m%s\033[0m", rowOutput)
+		} else {
+			fmt.Printf("%s", rowOutput)
 		}
 
 		fmt.Println()
@@ -50,7 +58,8 @@ func pascalTriangle(rows *int64) {
 
 func main() {
 	var rows = flag.Int64("rows", 5, "Number of rows in Pascal's Triangle")
+	var color = flag.Bool("color", false, "Should we color the output?")
 	flag.Parse()
 
-	pascalTriangle(rows)
+	pascalTriangle(rows, color)
 }
